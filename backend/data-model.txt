@@ -1,0 +1,14 @@
+users
+    -username
+    -password
+    -firstName
+    -lastName
+    -email
+
+activities
+    -type (enum) bike, swim, soccer, run, etc
+    -distance
+    -date
+    -time
+    -title
+    -description

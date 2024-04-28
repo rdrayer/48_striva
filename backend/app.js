@@ -1,14 +1,33 @@
 "use strict";
 
 const express = require("express");
-//const cors = require("cors");
+const cors = require("cors");
+const db = require("./db");
+
+const usersRoutes = require("./routes/users");
+const activitiesRoutes = require("./routes/activities.js");
 
 const app = express();
+app.use(cors());
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('hello world');
+app.use("/users", usersRoutes);
+app.use("/activities", activitiesRoutes);
+
+// handle 404 errors
+app.use(function (req, res, next) {
+    return next(new NotFoundError());
+  });
+
+// generic error handler
+app.use(function (err, req, res, next) {
+    if (process.env.NODE_ENV !== "test") console.error(err.stack);
+    const status = err.status || 500;
+    const message = err.message;
+
+    return res.status(status).json({
+        error: { message, status }
+    });
 });
-
-
 
 module.exports = app;
