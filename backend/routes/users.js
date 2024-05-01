@@ -1,6 +1,6 @@
 "use strict";
 
-/** Users Routes **/
+/** User Routes **/
 
 const jsonschema = require("jsonschema");
 
