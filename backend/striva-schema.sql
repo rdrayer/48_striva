@@ -11,7 +11,7 @@ CREATE TYPE activity_type AS ENUM ('cycle', 'swim', 'run', 'hike', 'soccer', 'ro
 
 CREATE TABLE activities (
   id SERIAL PRIMARY KEY,
-  activity activity_type NOT NULL,
+  activity_type activity_type NOT NULL,
   distance DECIMAL(10, 2) CHECK (distance >= 0),
   activity_datetime TIMESTAMP NOT NULL,
   activity_duration INTEGER NOT NULL,

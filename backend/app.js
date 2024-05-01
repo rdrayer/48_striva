@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/users", usersRoutes);
-app.use("/activities", activitiesRoutes);
+//app.use("/activities", activitiesRoutes);
 
 // handle 404 errors
 app.use(function (req, res, next) {

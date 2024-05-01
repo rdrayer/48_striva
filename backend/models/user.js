@@ -8,7 +8,7 @@ const { NotFoundError, BadRequestError, UnauthorizedError } = require("../expres
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
 
 class User {
-    /** authenticate user with username, password.
+    /** Authenticate user with username, password.
      *
      * Returns { username, first_name, last_name, email, is_admin }
      *
@@ -90,7 +90,7 @@ class User {
      * Input: username Output: data about user
      * Returns: { username, first_name, last_name, activities }
      * Throws NotFoundError if not found.
-     */
+     **/
     static async get(username) {
         const userRes = await db.query(
             `SELECT username,
@@ -122,7 +122,7 @@ class User {
      * Input can include: { firstName, lastName, email }
      * Returns: { username, firstName, lastName, email }
      * Throws NotFoundError if not found.
-     */
+     **/
     static async update(username, data) {
         if (data.password) {
             data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);

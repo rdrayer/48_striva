@@ -8,7 +8,7 @@ const express = require("express");
 const { ensureCorrectUser } = require("../middleware/auth");
 const { BadRequestError } = require("../expressError");
 const Activity = require("../models/activity");
-const { createToken } = require("../helpers/tokens");
+
 const activityNewSchema = require("../schemas/activityNew.json");
 const activityUpdateSchema = require("../schemas/activityUpdate.json");
 

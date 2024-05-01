@@ -12,7 +12,7 @@ VALUES ('testuser',
         'Admin!',
         'joel@joelburton.com');
 
-INSERT INTO activities (activity, distance, activity_datetime, activity_duration, title, description, user_id)
+INSERT INTO activities (activity_type, distance, activity_datetime, activity_duration, title, description, user_id)
 VALUES  ('run', 3.2, '2024-04-28 07:00:00', 30, 'Morning Run', 'Quick morning run around the neighborhood.', 'testuser'),
         ('hike', 5.0, '2024-04-29 09:00:00', 120, 'Mountain Hike', 'Hiking up the local mountain.', 'testuser'),
         ('cycle', 15.5, '2024-04-30 06:30:00', 45, 'Early Cycling', 'Road cycling at dawn.', 'testuser'),
