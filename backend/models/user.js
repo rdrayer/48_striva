@@ -10,7 +10,7 @@ const { BCRYPT_WORK_FACTOR } = require("../config.js");
 class User {
     /** Authenticate user with username, password.
      *
-     * Returns { username, first_name, last_name, email, is_admin }
+     * Returns { username, first_name, last_name, email }
      *
      * Throws UnauthorizedError is user not found or wrong password.
      **/
@@ -43,7 +43,7 @@ class User {
 
     /** Register user with data.
      *
-     * Returns { username, firstName, lastName, email, isAdmin }
+     * Returns { username, firstName, lastName, email }
      *
      * Throws BadRequestError on duplicates.
      **/
@@ -84,6 +84,23 @@ class User {
     const user = result.rows[0];
 
     return user;
+    }
+
+    /** Find all users.
+     *
+     * Returns [{ username, first_name, last_name, email, is_admin }, ...]
+     **/
+    static async findAll() {
+        const result = await db.query(
+            `SELECT username,
+                    first_name AS "firstName",
+                    last_name AS "lastName",
+                    email"
+            FROM users
+            ORDER BY username`,
+        );
+
+        return result.rows;
     }
 
     /** GET 
@@ -151,6 +168,20 @@ class User {
 
         delete user.password;
         return user;
+    }
+
+    /** Delete given user from database; returns undefined. */
+    static async remove(username) {
+        let result = await db.query(
+            `DELETE
+            FROM users
+            WHERE username = $1
+            RETURNING username`,
+            [username],
+        );
+        const user = result.rows[0];
+
+        if (!user) throw new NotFoundError(`No user: ${username}`);
     }
 
 }

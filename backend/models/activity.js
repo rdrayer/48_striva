@@ -14,23 +14,22 @@ class Activity {
      * Throws BadRequestError if activity already in database.
      * */
 
-    static async create({ id, activityType, distance, activityDateTime, activityDuration, title, description, username }) {
+    static async create({ activityType, distance, activityDateTime, activityDuration, title, description, username }) {
         const duplicateCheck = await db.query(
             `SELECT id
             FROM activities
-            WHERE id = $1`,
-            [id]);
+            WHERE title = $1 AND user_id = $2`,
+            [title, username]);
 
         if (duplicateCheck.rows[0])
-        throw new BadRequestError(`Duplicate activity: ${id}`);
+        throw new BadRequestError(`Duplicate activity: ${title}`);
 
         const result = await db.query(
             `INSERT INTO activities
-            (activity_type, activity_date_time, activity_duration, title, description, user_id)
-            VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING id, activityType, distance, activity_date_time AS "activityDateTime", activity_duration AS "activityDuration", title, description, user_id AS "username"`,
+            (activity_type, distance, activity_datetime, activity_duration, title, description, user_id)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING id, activity_type AS "activityType", distance, activity_datetime AS "activityDateTime", activity_duration AS "activityDuration", title, description, user_id AS "username"`,
             [
-            id,
             activityType,
             distance,
             activityDateTime,
@@ -51,26 +50,42 @@ class Activity {
      * Returns [{ id, activityType, distance, activityDateTime, activityDuration, title, description, user_id }, ...]
      * */
 
-    static async findAll() {
-        let query = `SELECT id,
+    static async findAll(username) {
+        const query = `SELECT id,
                             activity_type AS "activityType",
                             distance,
-                            activity_date_time AS "activityDateTime",
+                            activity_datetime AS "activityDateTime",
                             activity_duration AS "activityDuration",
                             title,
                             description,
                             user_id AS "username"
-                    FROM activities`;
+                    FROM activities
+                    WHERE user_id = $1
+                    ORDER BY activity_datetime DESC`;
 
-        query += " ORDER BY id";
-        const activitiesRes = await db.query(query);
+        const activitiesRes = await db.query(query, [username]);
         return activitiesRes.rows;
     }
+
+    static async findTopUsersByWeek(startDate, endDate) {
+        const query = `
+            SELECT user_id AS "username",
+                   SUM(distance) AS "totalDistance",
+                   COUNT(*) AS "numberOfActivities"
+            FROM activities
+            WHERE activity_datetime >= $1 AND activity_datetime <= $2
+            GROUP BY user_id
+            ORDER BY "totalDistance" DESC
+        `;
+    
+        const result = await db.query(query, [startDate, endDate]);
+        return result.rows;
+    }
+    
 
     /** Given a activity handle, return data about activity.
      *
      * Returns { id, activityType, distance, activityDateTime, activityDuration, title, description, user_id }
-     *   where jobs is [{ id, title, salary, equity }, ...]
      *
      * Throws NotFoundError if not found.
      **/
@@ -80,7 +95,7 @@ class Activity {
             `SELECT id,
                     activity_type AS "activityType",
                     distance,
-                    activity_date_time AS "activityDateTime",
+                    activity_datetime AS "activityDateTime",
                     activity_duration AS "activityDuration",
                     title,
                     description,
@@ -116,20 +131,21 @@ class Activity {
      **/
     static async update(id, data) {
         const { setCols, values } = sqlForPartialUpdate(data,{});
-        const idVarIdx = "$" + (values.length + 1);
+        //const idVarIdx = "$" + (values.length + 1);
+        const idVarIdx = values.length + 1;
     
         const querySql = `UPDATE activities 
                           SET ${setCols} 
-                          WHERE id = ${idVarIdx} 
+                          WHERE id = $${idVarIdx} 
                           RETURNING id,
                                     activity_type AS "activityType",
                                     distance,
-                                    activity_date_time AS "activityDateTime",
+                                    activity_datetime AS "activityDateTime",
                                     activity_duration AS "activityDuration",
                                     title,
                                     description,
                                     user_id AS "username"`;
-        const result = await db.query(querySql, [...values, username]);
+        const result = await db.query(querySql, [...values, id]);
         const activity = result.rows[0];
     
         if (!activity) throw new NotFoundError(`No activity: ${id}`);

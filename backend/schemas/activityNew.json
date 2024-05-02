@@ -3,21 +3,24 @@
     "$id": "http://our.company.com/companyUpdate.schema.json",
     "type": "object",
     "properties": {
-      "id": {
-        "type": "integer"
-      },
       "activityType": {
         "type": "string"
       },
       "distance": {
-        "type": "number"
+        "type": "number",
+        "minimum": 0
       },
       "activityDateTime": {
+        "type": "string",
+        "format": "date-time"
       },
       "activityDuration": {
+        "type": "number",
+        "minimum": 0
       },
       "title": {
-        "type": "string"
+        "type": "string",
+        "maxLength": 25
       },
       "description": {
         "type": "string"
@@ -28,8 +31,7 @@
     },
     "additionalProperties": false,
     "required": [
-        "id",
-        "activity",
+        "activityType",
         "activityDateTime",
         "activityDuration",
         "title",

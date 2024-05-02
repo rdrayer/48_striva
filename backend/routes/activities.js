@@ -6,7 +6,7 @@ const jsonschema = require("jsonschema");
 
 const express = require("express");
 const { ensureCorrectUser } = require("../middleware/auth");
-const { BadRequestError } = require("../expressError");
+const { BadRequestError, NotFoundError } = require("../expressError");
 const Activity = require("../models/activity");
 
 const activityNewSchema = require("../schemas/activityNew.json");
@@ -15,35 +15,53 @@ const activityUpdateSchema = require("../schemas/activityUpdate.json");
 const router = express.Router();
 
 // get all activities todo map through activities
-router.get("/", async function (req, res, next) {
+router.get("/", ensureCorrectUser, async function (req, res, next) {
     try {
-        const activities = await Activity.get(req.params.activities);
+        // might need to change this
+        const userId = req.user.id;
+        const activities = await Activity.findAll(userId);
         return res.json({ activities });
     } catch (err) {
         return next(err);
     }
 });
 
-// todo post activity
+/** POST / { activity } => { activity }
+ * 
+ */
 router.post("/", ensureCorrectUser, async function (req, res, next) {
     try {
-        
+        const validator = jsonschema.validate(req.body, activityNewSchema);
+        if (!validator.valid) {
+            const errs = validator.errors.map(e => e.stack);
+            throw new BadRequestError(errs);
+        }
+        const activity = await Activity.create(req.body);
+        return res.status(201).json({ activity });
     } catch (err) {
         return next(err);
     }
 });
 
-// todo get activity
+/** GET / [id] => { activity }
+ * 
+ */
 router.get("/:id", ensureCorrectUser, async function (req, res, next) {
     try {
-        const activity = await Activity.get(req.params.activity);
-        return res.json({ activity });
+        const activity = await Activity.get(req.params.id);
+        if (activity) {
+            return res.json({ activity });
+        } else {
+            throw new NotFoundError();
+        }
     } catch (err) {
         return next(err);
     }
 });
 
-// todo patch activity
+/** PATCH / [activity] { activity } => { activity }
+ *  title and description for now
+ */
 router.patch("/:id", ensureCorrectUser, async function (req, res, next) {
     try {
         const validator = jsonschema.validate(req.body, activityUpdateSchema);
@@ -51,7 +69,7 @@ router.patch("/:id", ensureCorrectUser, async function (req, res, next) {
             const errs = validator.errors.map(e => e.stack);
             throw new BadRequestError(errs);
         }
-    const activity = await Activity.update(req.params.activity, req.body);
+    const activity = await Activity.update(req.params.id, req.body);
     console.log('patch', activity);
 
     return res.json({ activity });
@@ -61,12 +79,16 @@ router.patch("/:id", ensureCorrectUser, async function (req, res, next) {
     }
 });
 
+/** DELETE / [activity] => { deleted: activity }
+ * 
+ */
 router.delete("/:id", ensureCorrectUser, async function (req, res, next) {
     try {
-        //todo
+        await Activity.remove(req.params.id);
+        return res.json({ deleted: req.params.username });
     }
     catch (err) {
-        //todo
+        return next(err);
     }
 });
 
