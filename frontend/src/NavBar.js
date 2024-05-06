@@ -15,6 +15,8 @@ function NavBar() {
       {currentUser && (
         <>
           {" | "}
+          <Link to={`/activities/${currentUser.username}`}>Activities</Link>
+          {" | "}
           <Link to={`/users/${currentUser.username}`}>Profile</Link>
         </>
       )}

@@ -7,7 +7,7 @@
         "type": "string"
       },
       "distance": {
-        "type": "number",
+        "type": "string",
         "minimum": 0
       },
       "activityDateTime": {
@@ -15,7 +15,7 @@
         "format": "date-time"
       },
       "activityDuration": {
-        "type": "number",
+        "type": "string",
         "minimum": 0
       },
       "title": {

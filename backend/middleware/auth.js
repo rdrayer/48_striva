@@ -71,6 +71,7 @@ function ensureCorrectUser(req, res, next) {
     console.log(user);
     console.log(req.params.username);
     if (!(user && (user.username === req.params.username))) {
+      console.log(user.username, req.params.username);
       throw new UnauthorizedError();
     }
     return next();

@@ -35,7 +35,7 @@ class StrivaApi {
   // Individual API routes
   static async getCurrentUser(username) {
     let res = await this.request(`users/${username}`);
-    console.log(res.user);
+    //console.log(res.user);
     return res.user;
   }
 
@@ -62,6 +62,36 @@ class StrivaApi {
   static async editProfile(username, data) {
     let res = await this.request(`users/${username}`, data, "patch");
     return res.user;
+  }
+
+  static async getActivities(username) {
+    try {
+      let res = await this.request(`activities/${username}`);
+      return res.activities;
+    } catch (error) {
+      console.error("Error getting activities:", error);
+    }
+  }
+
+  static async createActivity(username, userData) {
+    try {
+      let res = await this.request(`activities/${username}/new`, userData, "post");
+      return res.activity;
+    } catch (error) {
+      console.error("error creating activity ", error);
+      throw error;
+    }
+  }
+
+  static async getActivity(id) {
+    try {
+      let res = await this.request(`/activities/${id}`);
+      console.log(res);
+      return res.activity;
+    } catch (error) {
+      console.error("Error getting activity:", error);
+      throw error;
+    }
   }
 
 }

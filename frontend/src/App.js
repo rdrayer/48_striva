@@ -9,6 +9,9 @@ import { jwtDecode } from 'jwt-decode';
 import Login from "./Login";
 import SignUp from "./SignUp";
 import Profile from "./Profile";
+import ActivitiesList from "./ActivitiesList"
+import CreateActivity from "./CreateActivity";
+import ActivityDetail from "./ActivityDetail";
 
 export const UserContext = createContext();
 
@@ -61,6 +64,9 @@ function App() {
               <Route path="/login" element={<Login login={login} />} />
               <Route path="/signup" element={<SignUp signup={signup} />} />
               <Route path="/users/:username" element={<Profile />} />
+              <Route path="/activities/:username" element={<ActivitiesList />}/>
+              <Route path="/activities/:id" element={<ActivityDetail />}/>
+              <Route path="/activities/:username/new" element={<CreateActivity />}/>
               <Route element={<p>Hmm, I can't seem to find the page you're looking for.</p>} />
             </Routes>     
           </main>

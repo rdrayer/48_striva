@@ -21,7 +21,7 @@ class User {
                     password,
                     first_name AS "firstName",
                     last_name AS "lastName",
-                    email"
+                    email
             FROM users
             WHERE username = $1`,
             [username],

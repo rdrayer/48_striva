@@ -24,16 +24,16 @@ const router = express.Router();
 //     }
 // });
 
-// Example of how you might call this function in an Express route
-router.get("/:username/activities", ensureCorrectUser, async function (req, res, next) {
-    try {
-        const username = req.params.username;  // Ensure this matches the logged-in user to avoid privacy leaks
-        const activities = await Activity.findAll(username);
-        res.json(activities);
-    } catch (err) {
-        return next(err);
-    }
-});
+// // Example of how you might call this function in an Express route
+// router.get("/:username/activities", ensureCorrectUser, async function (req, res, next) {
+//     try {
+//         const username = req.params.username;  // Ensure this matches the logged-in user to avoid privacy leaks
+//         const activities = await Activity.findAll(username);
+//         res.json(activities);
+//     } catch (err) {
+//         return next(err);
+//     }
+// });
 
 
 /** GET /[username] => { user }
