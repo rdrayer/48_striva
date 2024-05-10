@@ -65,7 +65,7 @@ function App() {
               <Route path="/signup" element={<SignUp signup={signup} />} />
               <Route path="/users/:username" element={<Profile />} />
               <Route path="/activities/:username" element={<ActivitiesList />}/>
-              <Route path="/activities/:id" element={<ActivityDetail />}/>
+              <Route path="/activities/:username/:id" element={<ActivityDetail />}/>
               <Route path="/activities/:username/new" element={<CreateActivity />}/>
               <Route element={<p>Hmm, I can't seem to find the page you're looking for.</p>} />
             </Routes>     

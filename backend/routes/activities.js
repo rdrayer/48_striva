@@ -14,7 +14,23 @@ const activityUpdateSchema = require("../schemas/activityUpdate.json");
 
 const router = express.Router();
 
-/** GET all activities todo map through activities
+/** GET top activities for the week to display in home page
+ */
+router.get("/", async function (req, res, next) {
+    try {
+        const endDate = new Date();
+        endDate.setHours(23, 59, 59, 999);
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - 7);
+        startDate.setHours(0, 0, 0, 0);
+        const activities = await Activity.findTopUsersByWeek(startDate, endDate);
+        return res.json({ activities });
+    } catch (err) {
+        return next(err);
+    }
+});
+
+/** GET all activities for the current user
  */
 router.get("/:username", async function (req, res, next) {
     try {
@@ -47,9 +63,10 @@ router.post("/:username/new", async function (req, res, next) {
 /** GET / [id] => { activity }
  * 
  */
-router.get("/:id", async function (req, res, next) {
+router.get("/:username/:id", async function (req, res, next) {
     try {
-        const activity = await Activity.get(req.params.id);
+        const id = req.params.id;
+        const activity = await Activity.get(id);
         if (activity) {
             return res.json({ activity });
         } else {

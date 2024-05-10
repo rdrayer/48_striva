@@ -39,6 +39,7 @@ function ActivitiesList() {
                                 key={a.id}
                                 id={a.id}
                                 title={a.title}
+                                username={currentUser.username}
                             />
                         ))}
                     </div>

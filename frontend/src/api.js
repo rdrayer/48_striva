@@ -83,13 +83,24 @@ class StrivaApi {
     }
   }
 
-  static async getActivity(id) {
+  static async getActivity(username, id) {
     try {
-      let res = await this.request(`/activities/${id}`);
+      let res = await this.request(`activities/${username}/${id}`);
       console.log(res);
       return res.activity;
     } catch (error) {
       console.error("Error getting activity:", error);
+      throw error;
+    }
+  }
+
+  static async getTopUsersByWeek(startDate, endDate) {
+    try {
+      let res = await this.request("activities");
+      console.log(res);
+      return res.activities;
+    } catch (error) {
+      console.error("Error getting top users activities:", error);
       throw error;
     }
   }
