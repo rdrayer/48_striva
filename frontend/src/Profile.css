@@ -1,0 +1,57 @@
+.edit-profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+}
+
+.edit-profile-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px; 
+    text-align: center;
+}
+
+.edit-profile-form h2 {
+    color: #d06620; /* Matching color with the navbar */
+    margin-bottom: 20px; /* Space below the title */
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left; 
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-input {
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc;
+    border-radius: 4px; 
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.btn-profile {
+    background-color: #d06620; 
+    color: white; 
+    border: none;
+    padding: 10px 15px; 
+    border-radius: 4px;
+    cursor: pointer; 
+    font-size: 16px; 
+    width: 100%;
+}
+
+.btn-profile:hover {
+    background-color: #b8571b;
+}

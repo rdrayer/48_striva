@@ -96,7 +96,7 @@ class StrivaApi {
 
   static async getTopUsersByWeek(startDate, endDate) {
     try {
-      let res = await this.request("activities");
+      let res = await this.request("activities", {startDate, endDate}, "get");
       console.log(res);
       return res.activities;
     } catch (error) {
@@ -105,12 +105,22 @@ class StrivaApi {
     }
   }
 
+  static async deleteActivity(activityId) {
+    try {
+      let res = await this.request(`activities/${activityId}`, {}, "delete");
+      return res.deleted;
+    } catch (error) {
+        console.error("Error deleting activity:", error);
+        throw error;
+    }
+  }
+
 }
 
 export default StrivaApi;
 
-// for now, put token ("testuser" / "password" on class)
-StrivaApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
-    "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
-    "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
+// // for now, put token ("testuser" / "password" on class)
+// StrivaApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
+//     "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
+//     "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
 

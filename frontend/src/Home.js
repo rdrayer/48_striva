@@ -13,7 +13,7 @@ function Home() {
         const fetchTopActivities = async () => {
             const endDate = new Date();
             const startDate = new Date();
-            startDate.setDate(endDate.getDate() - 7);
+            startDate.setDate(endDate.getDate() - 30);
             try {
                 const formattedStartDate = startDate.toISOString().slice(0, 10);
                 const formattedEndDate = endDate.toISOString().slice(0, 10);
@@ -34,26 +34,28 @@ function Home() {
     }
 
     return (
-        <div>
-            <h1>Striva</h1>
-            <h3>Track your activities.</h3>
+        <div className="home-container">
             {currentUser ? (
-                <div>
-                    <h2>Welcome Back {currentUser.firstName}</h2>
-                    <h3>Top Users This Week:</h3>
-                    <ul>
+                <div className="welcome-section">
+                    <h2 className="welcome-message">Welcome Back {currentUser.firstName}</h2>
+                    <h3 className="top-users-title">Top Users This Week:</h3>
+                    <ul className="top-users-list">
                         {topUsers.map(user => (
-                            <li key={user.username}>
+                            <li key={user.username} className="top-user-item">
                                 {user.username}: {user.totalDistance} miles over {user.numberOfActivities} activities
                             </li>
                         ))}
                     </ul>
                 </div>
             ) : (
-                <p>
-                    <Link className="btn" to="/login">Login</Link>
-                    <Link className="btn" to="/signup">Signup</Link>
-                </p>
+                <div>
+                    <h1>Striva</h1>
+                    <h3>Track your activities.</h3>
+                    <p>
+                        <Link className="btn" to="/login">Login</Link>
+                        <Link className="btn" to="/signup">Signup</Link>
+                    </p>
+                </div>
             )}
         </div>
         

@@ -21,7 +21,7 @@ router.get("/", async function (req, res, next) {
         const endDate = new Date();
         endDate.setHours(23, 59, 59, 999);
         const startDate = new Date();
-        startDate.setDate(startDate.getDate() - 7);
+        startDate.setDate(startDate.getDate() - 30);
         startDate.setHours(0, 0, 0, 0);
         const activities = await Activity.findTopUsersByWeek(startDate, endDate);
         return res.json({ activities });
@@ -100,10 +100,10 @@ router.patch("/:id", ensureCorrectUser, async function (req, res, next) {
 /** DELETE / [activity] => { deleted: activity }
  * 
  */
-router.delete("/:id", ensureCorrectUser, async function (req, res, next) {
+router.delete("/:id", async function (req, res, next) {
     try {
         await Activity.remove(req.params.id);
-        return res.json({ deleted: req.params.username });
+        return res.json({ deleted: req.params.id });
     }
     catch (err) {
         return next(err);

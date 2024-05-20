@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "./App";
 import JoblyApi from "./api";
+import './Profile.css';
 
 function Profile() {
     const { currentUser } = useContext(UserContext);
@@ -48,12 +49,14 @@ function Profile() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
+    <div className="edit-profile-container">
+        <form onSubmit={handleSubmit} className="edit-profile-form">
+            <div className="form-group">
                 <label>Username</label>
                 <input
                     disabled
                     placeholder={formData.username}
+                    className="form-input"
                 />
                 <label>First Name</label>
                 <input
@@ -62,6 +65,7 @@ function Profile() {
                     id="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
+                    className="form-input"
                 />
                 <label htmlFor="lastName">Last Name</label>
                 <input
@@ -70,6 +74,7 @@ function Profile() {
                     id="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
+                    className="form-input"
                 />
                 <label>Email</label>
                 <input
@@ -78,11 +83,13 @@ function Profile() {
                     id="email"
                     value={formData.email}
                     onChange={handleChange}
+                    className="form-input"
                 />
-                <button type="submit">Save Changes</button>
+                <button type="submit" className="btn-profile">Save Changes</button>
                 {isUpdated && <div>Updated Successfully</div>}
             </div>
         </form>
+    </div>
     )
 }
 

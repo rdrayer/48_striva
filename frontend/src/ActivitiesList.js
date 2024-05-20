@@ -2,12 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import StrivaApi from "./api";
 import ActivityCard from "./ActivityCard";
 import { UserContext } from "./App";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function ActivitiesList() {
     const [activities, setActivities] = useState([]);
-
     const { currentUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
     async function fetchActivities() {
         if (currentUser && currentUser.username) {
@@ -26,25 +26,36 @@ function ActivitiesList() {
         fetchActivities();
     }, []);
 
+    const handleNewActivity = () => {
+        navigate(`/activities/${currentUser.username}/new`);
+    };
 
     return (
-        <div>
+        <div className="activities-container">
             <p>
-                {currentUser ? (<Link to={`/activities/${currentUser.username}/new`}>New</Link>) : (<span></span>)}
+                {currentUser ? (
+                    <button onClick={handleNewActivity} className="btn">Create Activity</button>
+                ) : (
+                    <span></span>
+                )}
             </p>
             {activities.length > 0 ? (
-                    <div>
+                    <div className="activities-list">
                         {activities.map(a => (
                             <ActivityCard 
                                 key={a.id}
                                 id={a.id}
                                 title={a.title}
                                 username={currentUser.username}
+                                description={a.description}
+                                activityType={a.activityType}
+                                distance={a.distance}
+                                duration={a.activityDuration}
                             />
                         ))}
                     </div>
                 ) : (
-                    <p>Sorry, no results</p>
+                    <p>Sorry, we didn't find any activities</p>
             )}
         </div>
     );
